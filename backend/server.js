@@ -4,7 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
-import sqlite3 from "sqlite3"; // ✅ make sure this import is here!
+import sqlite3 from "sqlite3"; // ✅ Import sqlite3 correctly
 
 // ===== Import Routes =====
 import publicRoutes from "./routes/public.js";
@@ -22,9 +22,14 @@ const __dirname = path.dirname(__filename);
 // ===== Initialize Database =====
 sqlite3.verbose();
 const dbPath = path.join(__dirname, "database.db");
-const db = new sqlite3.Database(dbPath);
+const db = new sqlite3.Database(dbPath, err => {
+  if (err) console.error("❌ DB connection error:", err.message);
+  else console.log("✅ Database connected:", dbPath);
+});
 
+// ===== Create Tables and Admin User =====
 db.serialize(() => {
+  // --- Snacks table ---
   db.run(`CREATE TABLE IF NOT EXISTS snacks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
@@ -32,6 +37,7 @@ db.serialize(() => {
     image TEXT
   )`);
 
+  // --- Orders table ---
   db.run(`CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     student_name TEXT,
@@ -42,33 +48,29 @@ db.serialize(() => {
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
 
+  // --- Admin table ---
   db.run(`CREATE TABLE IF NOT EXISTS admin (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE,
     password TEXT
-  )`);
-
-  // ✅ Ensure custom admin (sreeXD / sree318) exists
-  db.get("SELECT * FROM admin WHERE username = ?", ["sreeXD"], (err, row) => {
-    if (err) {
-      console.error("Admin check error:", err.message);
-      return;
-    }
-    if (!row) {
-      db.run(
-        "INSERT INTO admin (username, password) VALUES (?, ?)",
-        ["sreeXD", "sree318"],
-        err2 => {
-          if (err2) {
-            console.error("Admin insert error:", err2.message);
-          } else {
-            console.log("✅ Default admin (sreeXD / sree318) created.");
+  )`, () => {
+    // Check for admin user after table creation
+    db.get("SELECT * FROM admin WHERE username = ?", ["sreeXD"], (err, row) => {
+      if (err) {
+        console.error("❌ Admin check error:", err.message);
+      } else if (!row) {
+        db.run(
+          "INSERT INTO admin (username, password) VALUES (?, ?)",
+          ["sreeXD", "sree318"],
+          err2 => {
+            if (err2) console.error("❌ Admin insert failed:", err2.message);
+            else console.log("✅ Default admin (sreeXD / sree318) created.");
           }
-        }
-      );
-    } else {
-      console.log("✅ Admin already exists in database.");
-    }
+        );
+      } else {
+        console.log("✅ Admin user already exists:", row.username);
+      }
+    });
   });
 });
 
