@@ -1,30 +1,8 @@
-// ===== Import Dependencies =====
-import express from "express";
-import cors from "cors";
-import bodyParser from "body-parser";
-import path from "path";
-import { fileURLToPath } from "url";
-import sqlite3 from "sqlite3";
-
-// ===== Import Routes =====
-import publicRoutes from "./routes/public.js";
-import adminRoutes from "./routes/admin.js";
-
-// ===== Setup Express =====
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
-
-// ===== Setup Paths =====
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 // ===== Initialize Database =====
 sqlite3.verbose();
 const dbPath = path.join(__dirname, "database.db");
 const db = new sqlite3.Database(dbPath);
 
-
-// Create tables if they don’t exist
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS snacks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,11 +27,32 @@ db.serialize(() => {
     password TEXT
   )`);
 
-  // Insert a default admin user
-  db.run(`INSERT OR IGNORE INTO admin (id, username, password) VALUES (1, 'sreeXD', 'sree318')`);
+  // ✅ Check if admin exists, otherwise create your custom one
+  db.get("SELECT * FROM admin WHERE username = ?", ["sreeXD"], (err, row) => {
+    if (err) {
+      console.error("Admin check error:", err.message);
+      return;
+    }
+    if (!row) {
+      db.run(
+        "INSERT INTO admin (username, password) VALUES (?, ?)",
+        ["sreeXD", "sree318"],
+        err2 => {
+          if (err2) {
+            console.error("Admin insert error:", err2.message);
+          } else {
+            console.log("✅ Default admin (sreeXD / sree318) created.");
+          }
+        }
+      );
+    } else {
+      console.log("✅ Admin already exists in database.");
+    }
+  });
 });
 
 export { db };
+
 
 // ===== Serve Frontend Folder =====
 app.use(express.static(path.join(__dirname, "../frontend")));
