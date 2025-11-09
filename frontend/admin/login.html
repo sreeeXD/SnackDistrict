@@ -1,25 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Login | Snack District</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/admin-style.css">
+  <link rel="stylesheet" href="../css/admin.css" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #0a0f2d, #1b1f3b);
+      color: #f8f4e3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container {
+      background: #15193a;
+      border-radius: 16px;
+      padding: 2rem 3rem;
+      box-shadow: 0 0 20px rgba(247, 200, 115, 0.2);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    h2 {
+      color: #f7c873;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.7rem;
+      border: none;
+      border-radius: 8px;
+      background: #101433;
+      color: #f8f4e3;
+      font-size: 1rem;
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.7rem;
+      border: none;
+      border-radius: 8px;
+      background: #f7c873;
+      color: #101433;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ffd97a;
+      transform: scale(1.03);
+    }
+
+    .message {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #e63946;
+    }
+  </style>
 </head>
 <body>
   <div class="login-container">
-    <div class="login-box">
-      <h2>
-        <span class="logo-snack">SNACK</span>
-        <span class="logo-district">DISTRICT</span>
-      </h2>
-      <form id="login-form">
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button class="btn" type="submit">Login</button>
-      </form>
-    </div>
+    <h2>Admin Login</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p id="message" class="message"></p>
   </div>
+
   <script src="../js/admin.js"></script>
 </body>
 </html>
