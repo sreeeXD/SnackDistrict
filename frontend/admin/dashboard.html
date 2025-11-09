@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | Snack District</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/admin-style.css">
+</head>
+<body>
+  <header class="logo-header">
+    <h1>
+      <span class="logo-snack">SNACK</span>
+      <span class="logo-district">DISTRICT</span>
+    </h1>
+  </header>
+
+  <main>
+    <section>
+      <h2>Snacks</h2>
+      <form id="add-snack">
+        <input type="text" id="snack-name" placeholder="Snack name" required>
+        <input type="number" id="snack-price" placeholder="Price" required>
+        <input type="text" id="snack-image" placeholder="Image URL (optional)">
+        <button class="btn" type="submit">Add Snack</button>
+      </form>
+      <div id="snack-list"></div>
+    </section>
+
+    <section>
+      <h2>Orders</h2>
+      <div id="order-list"></div>
+    </section>
+  </main>
+
+  <script src="../js/admin.js"></script>
+</body>
+</html>

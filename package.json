@@ -1,0 +1,31 @@
+{
+  "name": "snack-district",
+  "version": "1.0.0",
+  "description": "Hostel snack-selling website with admin panel and session-based cart system. Built for LateNightCart.in project.",
+  "type": "module",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "keywords": [
+    "snacks",
+    "hostel",
+    "website",
+    "express",
+    "sqlite3",
+    "admin",
+    "LateNightCart"
+  ],
+  "author": "Srivardhan Artham",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

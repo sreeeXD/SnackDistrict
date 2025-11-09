@@ -1,0 +1,187 @@
+/* ========== GLOBAL ========== */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(145deg, #0a0f2d, #1b1f3b);
+  color: #f8f4e3;
+  min-height: 100vh;
+}
+
+/* ========== HEADER / LOGO ========== */
+.logo-header, header {
+  background: linear-gradient(135deg, #0a0f2d, #1b1f3b);
+  color: #FBEBD0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+header h1, .logo-header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.logo-snack {
+  color: #FBEBD0; /* beige */
+  text-shadow: 0 0 10px rgba(251, 235, 208, 0.6);
+}
+
+.logo-district {
+  color: #E63946; /* red */
+  margin-left: 8px;
+  text-shadow: 0 0 6px rgba(230, 57, 70, 0.5);
+}
+
+/* ========== MAIN CONTENT ========== */
+main {
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+section {
+  background: rgba(21, 25, 58, 0.8);
+  padding: 1.5rem;
+  border-radius: 16px;
+  flex: 1;
+  min-width: 320px;
+  box-shadow: 0 0 15px rgba(247, 200, 115, 0.2);
+}
+
+section h2 {
+  color: #f7c873;
+  font-weight: 700;
+  margin-top: 0;
+  border-bottom: 2px solid rgba(247, 200, 115, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+/* ========== SNACK FORM ========== */
+#add-snack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+#add-snack input {
+  width: 100%;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 8px;
+  background: #101433;
+  color: #f8f4e3;
+  outline: none;
+}
+
+#add-snack input:focus {
+  box-shadow: 0 0 8px rgba(247, 200, 115, 0.4);
+}
+
+/* ========== BUTTONS ========== */
+.btn, .btn-secondary {
+  padding: 0.6rem 1rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.btn {
+  background: #f7c873;
+  color: #0a0f2d;
+  box-shadow: 0 0 8px rgba(247, 200, 115, 0.3);
+}
+
+.btn:hover {
+  background: #ffd97a;
+  box-shadow: 0 0 12px rgba(247, 200, 115, 0.6);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #f7c873;
+  border: 1px solid #f7c873;
+}
+
+.btn-secondary:hover {
+  background: rgba(247, 200, 115, 0.1);
+}
+
+/* ========== SNACK LIST ========== */
+#snack-list div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1a1d40;
+  margin: 0.5rem 0;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.05);
+}
+
+#snack-list div:hover {
+  background: #21244a;
+}
+
+/* ========== ORDER LIST ========== */
+#order-list .order {
+  background: #1a1d40;
+  padding: 1rem;
+  border-radius: 10px;
+  margin: 0.8rem 0;
+  box-shadow: 0 0 10px rgba(247, 200, 115, 0.1);
+  line-height: 1.6;
+  transition: 0.3s;
+}
+
+#order-list .order:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(247, 200, 115, 0.25);
+}
+
+/* ========== LOGIN PAGE ========== */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-box {
+  background: #15193a;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-box h2 {
+  color: #FBEBD0;
+  margin-bottom: 1rem;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 0.7rem;
+  margin: 0.6rem 0;
+  border: none;
+  border-radius: 8px;
+  background: #101433;
+  color: #f8f4e3;
+}
+
+.login-box button {
+  width: 100%;
+  margin-top: 1rem;
+}
