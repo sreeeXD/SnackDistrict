@@ -1,15 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hostel Snacks</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css" />
-</head><body>
+  <title>Snack District</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #0a0f2d, #1b1f3b);
+      color: #f8f4e3;
+    }
+
+    .logo-header {
+      background-color: #1b0e3c; 
+      color: #FAEBD7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo-snack {
+      color: #FAEBD7; /* beige */
+    }
+
+    .logo-district {
+      color: #e63946; /* red */
+      margin-left: 8px;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #f7c873;
+      border: 1px solid #f7c873;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-secondary:hover {
+      background: #f7c873;
+      color: #101433;
+    }
+
+    h2 {
+      text-align: center;
+      color: #f7c873;
+    }
+
+    .snack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 2rem;
+    }
+
+    .snack-card {
+      background: #15193a;
+      border-radius: 16px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(247, 200, 115, 0.2);
+      transition: 0.3s;
+    }
+
+    .snack-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(247, 200, 115, 0.4);
+    }
+
+    .snack-card img {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* ===== Admin Dashboard ===== */
+    #adminDashboard {
+      background: #15193a;
+      border-radius: 12px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      max-width: 700px;
+      box-shadow: 0 0 15px rgba(247, 200, 115, 0.2);
+    }
+
+    #addSnackForm input {
+      width: 100%;
+      padding: 0.7rem;
+      margin: 0.4rem 0;
+      border-radius: 8px;
+      border: none;
+      background: #101433;
+      color: #f8f4e3;
+    }
+
+    .btn {
+      background: #f7c873;
+      color: #0a0f2d;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #ffd97a;
+    }
+
+    /* ===== Modal Styling ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: #15193a;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(247, 200, 115, 0.2);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 0.7rem;
+      margin: 0.5rem 0;
+      border: none;
+      border-radius: 8px;
+      background: #101433;
+      color: #f8f4e3;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 1rem;
+      color: #f7c873;
+    }
+
+    #loginMessage {
+      margin-top: 0.5rem;
+      color: #e63946;
+    }
+  </style>
+</head>
+<body>
   <header class="logo-header">
-    <h1><span class="logo-snack">SNACK</span> District</h1>
+    <h1><span class="logo-snack">SNACK</span><span class="logo-district">District</span></h1>
     <button id="adminLoginBtn" class="btn-secondary">Admin Login</button>
   </header>
 
@@ -19,35 +171,36 @@
       <div class="snack-grid" id="snackGrid"></div>
     </section>
 
-    <!-- Admin Dashboard (hidden until login) -->
+    <!-- Admin Dashboard (Hidden Initially) -->
     <section id="adminDashboard" class="hidden">
       <h2>Admin Dashboard</h2>
 
       <form id="addSnackForm">
-        <input type="text" id="snackName" placeholder="Snack name" required>
-        <input type="number" id="snackPrice" placeholder="Price" required>
-        <input type="text" id="snackImage" placeholder="Image URL" required>
+        <input type="text" id="snackName" placeholder="Snack name" required />
+        <input type="number" id="snackPrice" placeholder="Price" required />
+        <input type="text" id="snackImage" placeholder="Image URL" required />
         <button type="submit" class="btn">Add Snack</button>
       </form>
 
       <p id="formMessage"></p>
 
-      <h3>Existing Snacks</h3>
+      <h3 style="color:#f7c873;">Existing Snacks</h3>
       <div id="snackList" class="snack-grid"></div>
     </section>
   </main>
 
-  <!-- Login Modal -->
+  <!-- ===== Admin Login Modal ===== -->
   <div id="loginModal" class="modal hidden">
     <div class="modal-content">
       <h2>Admin Login</h2>
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="password" id="password" placeholder="Password" required>
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
       <button id="loginBtn" class="btn">Login</button>
-      <button id="closeModal" class="btn-secondary">Close</button>
+      <button id="closeModal" class="btn-secondary" style="margin-top:10px;">Close</button>
       <p id="loginMessage"></p>
     </div>
   </div>
 
   <script src="js/main.js"></script>
 </body>
+</html>
