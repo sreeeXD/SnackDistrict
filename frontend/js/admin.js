@@ -1,43 +1,50 @@
-// ===== Admin Login Script =====
+import express from "express";
+import sqlite3 from "sqlite3";
 
-// Handle login form submission
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+const router = express.Router();
+const db = new sqlite3.Database("./backend/database.db");
 
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const messageEl = document.getElementById("message");
-
-  messageEl.textContent = "";
-
-  if (!username || !password) {
-    messageEl.textContent = "Please enter both username and password.";
-    return;
+// 🟢 Add a new snack
+router.post("/add-snack", (req, res) => {
+  const { name, price, image } = req.body;
+  if (!name || !price || !image) {
+    return res.status(400).json({ success: false, message: "Missing fields" });
   }
 
-  try {
-    const res = await fetch("/api/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok && data.success) {
-      messageEl.style.color = "#4caf50";
-      messageEl.textContent = "✅ Login successful! Redirecting...";
-      localStorage.setItem("adminToken", data.token || "default");
-      setTimeout(() => {
-        window.location.href = "/admin/dashboard.html";
-      }, 1000);
-    } else {
-      messageEl.style.color = "#e63946";
-      messageEl.textContent = "❌ Invalid username or password.";
+  db.run(
+    "INSERT INTO snacks (name, price, image) VALUES (?, ?, ?)",
+    [name, price, image],
+    (err) => {
+      if (err) {
+        console.error("Error adding snack:", err);
+        return res.status(500).json({ success: false, message: "Database error" });
+      }
+      res.json({ success: true });
     }
-  } catch (err) {
-    console.error("Login error:", err);
-    messageEl.style.color = "#e63946";
-    messageEl.textContent = "⚠️ Server error. Please try again later.";
-  }
+  );
 });
+
+// 🟡 Get all snacks
+router.get("/snacks", (req, res) => {
+  db.all("SELECT * FROM snacks", [], (err, rows) => {
+    if (err) {
+      console.error("Error fetching snacks:", err);
+      return res.status(500).json({ success: false, message: "Database error" });
+    }
+    res.json(rows);
+  });
+});
+
+// 🔴 Delete a snack
+router.delete("/delete-snack/:id", (req, res) => {
+  const { id } = req.params;
+  db.run("DELETE FROM snacks WHERE id = ?", [id], (err) => {
+    if (err) {
+      console.error("Error deleting snack:", err);
+      return res.status(500).json({ success: false, message: "Database error" });
+    }
+    res.json({ success: true });
+  });
+});
+
+export default router;
