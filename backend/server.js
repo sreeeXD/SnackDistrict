@@ -6,12 +6,12 @@ import path from "path";
 import { fileURLToPath } from "url";
 import sqlite3 from "sqlite3";
 
-// ===== Setup Express =====
+// ===== Express Setup =====
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// ===== Setup Paths =====
+// ===== Path Setup =====
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -19,14 +19,11 @@ const __dirname = path.dirname(__filename);
 sqlite3.verbose();
 const dbPath = path.join(__dirname, "database.db");
 const db = new sqlite3.Database(dbPath, err => {
-  if (err) {
-    console.error("❌ Database connection failed:", err.message);
-  } else {
-    console.log("✅ Database connected:", dbPath);
-  }
+  if (err) console.error("❌ DB connection failed:", err.message);
+  else console.log("✅ DB connected:", dbPath);
 });
 
-// ===== Create Tables if Not Exist =====
+// ===== Create Tables =====
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS snacks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,7 +48,7 @@ db.serialize(() => {
     password TEXT
   )`);
 
-  // ✅ Ensure default admin exists
+  // ✅ Ensure admin exists
   db.get("SELECT * FROM admin WHERE username = ?", ["sreeXD"], (err, row) => {
     if (!row) {
       db.run(
@@ -69,35 +66,30 @@ db.serialize(() => {
 });
 
 // ===== Admin Routes =====
-const router = express.Router();
 
-// 🔑 Admin Login
-router.post("/login", (req, res) => {
+// 🔑 Login
+app.post("/api/admin/login", (req, res) => {
   const { username, password } = req.body;
+  if (!username || !password)
+    return res.status(400).json({ success: false, message: "Missing credentials" });
 
   db.get(
     "SELECT * FROM admin WHERE username = ? AND password = ?",
     [username, password],
     (err, row) => {
-      if (err) {
-        console.error("Login error:", err.message);
-        return res.status(500).json({ success: false, message: "Database error" });
-      }
-
-      if (row) {
-        res.json({ success: true, message: "Login successful" });
-      } else {
-        res.status(401).json({ success: false, message: "Invalid credentials" });
-      }
+      if (err) return res.status(500).json({ success: false, message: err.message });
+      if (row) return res.json({ success: true });
+      else return res.status(401).json({ success: false, message: "Invalid login" });
     }
   );
 });
 
-// ➕ Add a Snack
-router.post("/add-snack", (req, res) => {
+// ➕ Add Snack
+app.post("/api/admin/add-snack", (req, res) => {
   const { name, price, image } = req.body;
+
   if (!name || !price || !image) {
-    return res.status(400).json({ success: false, message: "Missing fields" });
+    return res.status(400).json({ success: false, message: "All fields required" });
   }
 
   db.run(
@@ -106,45 +98,41 @@ router.post("/add-snack", (req, res) => {
     err => {
       if (err) {
         console.error("Error adding snack:", err.message);
-        return res.status(500).json({ success: false, message: "Database error" });
+        return res.status(500).json({ success: false });
       }
+      console.log(`✅ Snack added: ${name}`);
       res.json({ success: true });
     }
   );
 });
 
-// 📦 Get All Snacks
-router.get("/snacks", (req, res) => {
+// 📦 Get Snacks
+app.get("/api/admin/snacks", (req, res) => {
   db.all("SELECT * FROM snacks", [], (err, rows) => {
     if (err) {
       console.error("Error fetching snacks:", err.message);
-      return res.status(500).json({ success: false, message: "Database error" });
+      return res.status(500).json({ success: false });
     }
     res.json(rows);
   });
 });
 
-// ❌ Delete a Snack
-router.delete("/delete-snack/:id", (req, res) => {
-  const { id } = req.params;
+// ❌ Delete Snack
+app.delete("/api/admin/delete-snack/:id", (req, res) => {
+  const id = req.params.id;
   db.run("DELETE FROM snacks WHERE id = ?", [id], err => {
-    if (err) {
-      console.error("Error deleting snack:", err.message);
-      return res.status(500).json({ success: false, message: "Database error" });
-    }
+    if (err) return res.status(500).json({ success: false });
     res.json({ success: true });
   });
 });
 
-// Mount admin routes under /api/admin
-app.use("/api/admin", router);
-
 // ===== Serve Frontend =====
 app.use(express.static(path.join(__dirname, "../frontend")));
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
 // ===== Start Server =====
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

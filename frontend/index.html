@@ -7,48 +7,47 @@
   <title>Hostel Snacks</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
- <header class="logo-header">
-  <h1>
-    <span class="logo-snack">SNACK</span>
-    <span class="logo-district">DISTRICT</span>
-  </h1>
-  <div class="cart-icon" onclick="openCart()">
-    🛒 <span id="cart-count">0</span>
-  </div>
-</header>
-
+</head><body>
+  <header class="logo-header">
+    <h1><span class="logo-snack">SNACK</span> District</h1>
+    <button id="adminLoginBtn" class="btn-secondary">Admin Login</button>
+  </header>
 
   <main>
-    <section id="snacks-container" class="snack-grid"></section>
+    <section id="snackSection">
+      <h2>Available Snacks</h2>
+      <div class="snack-grid" id="snackGrid"></div>
+    </section>
+
+    <!-- Admin Dashboard (hidden until login) -->
+    <section id="adminDashboard" class="hidden">
+      <h2>Admin Dashboard</h2>
+
+      <form id="addSnackForm">
+        <input type="text" id="snackName" placeholder="Snack name" required>
+        <input type="number" id="snackPrice" placeholder="Price" required>
+        <input type="text" id="snackImage" placeholder="Image URL" required>
+        <button type="submit" class="btn">Add Snack</button>
+      </form>
+
+      <p id="formMessage"></p>
+
+      <h3>Existing Snacks</h3>
+      <div id="snackList" class="snack-grid"></div>
+    </section>
   </main>
 
-  <!-- Cart Modal -->
-  <div id="cart-modal" class="modal hidden">
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal hidden">
     <div class="modal-content">
-      <h2>Your Cart</h2>
-      <div id="cart-items"></div>
-      <button class="btn" onclick="showOrderForm()">Proceed to Order</button>
-      <button class="btn-secondary" onclick="closeCart()">Close</button>
+      <h2>Admin Login</h2>
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button id="loginBtn" class="btn">Login</button>
+      <button id="closeModal" class="btn-secondary">Close</button>
+      <p id="loginMessage"></p>
     </div>
   </div>
 
-  <!-- Order Form Modal -->
-  <div id="order-modal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Order Details</h2>
-      <form id="order-form">
-        <input type="text" id="name" placeholder="Your Name" required />
-        <input type="text" id="room" placeholder="Room Number" required />
-        <input type="text" id="phone" placeholder="Phone (optional)" />
-        <button type="submit" class="btn">Place Order</button>
-      </form>
-      <button class="btn-secondary" onclick="closeOrderForm()">Cancel</button>
-    </div>
-  </div>
-
-  <script src="js/cart.js"></script>
   <script src="js/main.js"></script>
 </body>
-</html>
